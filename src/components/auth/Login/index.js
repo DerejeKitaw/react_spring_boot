@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import classnames from 'classnames';
+import { connect } from 'react-redux';
+import { loginUser } from '../../../store/actions/authActions';
 
 class index extends Component {
   constructor() {
@@ -12,14 +14,30 @@ class index extends Component {
     this.onChange = this.onChange.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
   }
-  onChange(e) {this.setState({[e.target.name]:e.target.value})}
+  componentDidMount() {
+    if (this.props.isAuthenticated) {
+      this.props.history.push('/dashboard');
+    }
+  }
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.auth.isAuthenticated) {
+      this.props.history.push('./home');
+    }
+    if (nextProps.errors) {
+      this.setState({ errors: nextProps.errors });
+    }
+  }
+  onChange(e) {
+    this.setState({ [e.target.name]: e.target.value });
+  }
   onSubmit(e) {
     e.preventDefault();
     const userData = {
       email: this.state.email,
-      password:this.state.password
-    }
-    console.log(userData);
+      password: this.state.password
+    };
+    //console.log(userData);
+    this.props.loginUser(userData);
   }
   render() {
     const { errors } = this.state;
@@ -64,4 +82,10 @@ class index extends Component {
     );
   }
 }
-export default index;
+const mapStateToProps = state => ({
+  auth: state.auth
+});
+export default connect(
+  mapStateToProps,
+  { loginUser }
+)(index);
