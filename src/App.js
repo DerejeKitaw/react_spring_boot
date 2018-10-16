@@ -14,10 +14,10 @@ import store from './store/store';
 import setAuthToken from './store/utils/setAuthToken';
 
 if (localStorage.jwtToken) {
-  console.log("localStorage: ",localStorage)
-//   setAuthToken(localStorage.jwtToken);
-//   const decoded = jwt_decode(localStorage.jwtToken);
-//   store.dispatch(setCurrentUser(decoded));
+  //console.log("localStorage: ",localStorage)
+  setAuthToken(localStorage.jwtToken);
+  const decoded = jwt_decode(localStorage.jwtToken);
+  store.dispatch(setCurrentUser(decoded));
 //   const currentTime = Date.now() / 1000;
 //   if (decoded.exp < currentTime) {
 //     store.dispatch(logoutUser());

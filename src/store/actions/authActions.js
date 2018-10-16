@@ -5,13 +5,13 @@ import { GET_ERRORS, SET_CURRENT_USER } from './types';
 
 // Login - Get User Token
 export const loginUser = userData => dispatch => {
-  console.log("userData",userData);
+  // console.log("userData",userData);
   axios
-  .post('/users/login', userData)
-  .then(res => {
-    console.log("res",res);
+    .post('/users/login', userData)
+    .then(res => {
+      // console.log("res",res);
       const { authorization } = res.headers;
-      console.log(authorization);
+      // console.log(authorization);
       localStorage.setItem('jwtToken', authorization);
 
       setAuthToken(authorization);
@@ -26,6 +26,25 @@ export const loginUser = userData => dispatch => {
     );
 };
 
+export const registerUser = (userData, history) => dispatch => {
+  axios
+    .post('/users', userData)
+    .then(res => {
+      console.log("res", res);
+      history.push('/login')
+    }
+    )
+    .catch(err =>
+    {
+      console.log("error-res", err);
+      
+      dispatch({
+        type: GET_ERRORS,
+        payload: err.response.data
+      })}
+    );
+};
+
 export const setCurrentUser = decoded => {
   return {
     type: SET_CURRENT_USER,
@@ -37,4 +56,4 @@ export const logoutUser = () => dispatch => {
   localStorage.removeItem('jwtToken');
   setAuthToken(false);
   dispatch(setCurrentUser({}));
-}
+};

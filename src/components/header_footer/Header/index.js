@@ -1,9 +1,29 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-
+import {logoutUser} from '../../../store/actions/authActions';
+import { connect } from 'react-redux';
 class index extends Component {
+  onLogoutClick(e){
+    e.preventDefault();
+    this.props.logoutUser();
+  }
   render() {
-    const gustLink = (
+    const { isAuthenticated, user } = this.props.auth;
+    console.log("isAuthenticated", isAuthenticated);
+    console.log("user", user);
+    const authLink = (
+      <ul className="navbar-nav ml-auto">
+        <li className="nav-item">
+          <Link
+            className="nav-link"
+            to="/logout"
+          onClick={this.onLogoutClick.bind(this)}
+          >
+            Logout</Link>
+        </li>
+      </ul>
+    );
+    const guestLink = (
       <ul className="navbar-nav">
         <li className="nav-item">
           <Link className="nav-link" to="login">
@@ -31,11 +51,14 @@ class index extends Component {
                 </Link>
               </li>
             </ul>
-            {gustLink}
+            {isAuthenticated? authLink:guestLink}
           </div>
         </div>
       </nav>
     );
   }
 }
-export default index;
+const mapStateToProps = state => ({
+  auth:state.auth
+})
+export default connect(mapStateToProps,{logoutUser})(index);

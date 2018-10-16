@@ -5,6 +5,10 @@ export class index extends Component {
     return (
       <div>
         This is Home
+        This is Home
+        This is Home
+        This is Home
+        This is Home
       </div>
     )
   }
